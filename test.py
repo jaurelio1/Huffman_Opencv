@@ -37,3 +37,4 @@ print(frequencePixels(image_copy, h_resized, w_resized))
 #cv2.imshow('imaged', resized)
 cv2.waitKey(0)
 
+#alteração para ver se hevlla pode da committ

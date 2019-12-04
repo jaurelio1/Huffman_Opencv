@@ -22,7 +22,7 @@ class Node:
 
     # store the nodes in an array
     def storeNode(self):
-        for i in range(255):
+        for i in range(256):
             #..................data, frequence of pixel
             self.H.append(Node(i, self.frequences[i]))
     # .............................................

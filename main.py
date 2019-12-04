@@ -23,14 +23,11 @@ if __name__ == '__main__':
     node = Node()
     node.setFrequencePixels(image_copy, h_resized, w_resized)
     tmp = node.returnArrayNode()
-    #print(tmp)
+
+    #here we construct the heap minimum bottom_up
     heap = Heap(tmp)
-    for i in range(255):
-        print(heap.node[i].frequence, end=' ')
-    S = heap.returnHeapMinimum()
-    print("\n")
-    for i in range(255):
-        print(S[i].frequence, end=' ')
+    S = heap.returnHeapUp()
+
 
     #display image
     #cv2.imshow('imaged', resized)

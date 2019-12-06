@@ -5,7 +5,7 @@ from Node import Node
 
 if __name__ == '__main__':
     #read the image
-    image = cv2.imread("re-elmayer.jpg")
+    image = cv2.imread("img1.tif")
 
     scale = 60
     w = int(image.shape[1]*scale / 100)
@@ -24,10 +24,28 @@ if __name__ == '__main__':
     node.setFrequencePixels(image_copy, h_resized, w_resized)
     tmp = node.returnArrayNode()
 
-    #here we construct the heap minimum bottom_up
+    #here we construct txhe heap minimum bottom_up
     heap = Heap(tmp)
     S = heap.returnHeapUp()
 
+    for i in range(len(S)):
+        print(S[i].frequence, end=" ")
+
+    print("\n")
+
+    #build the tree of heap Max
+    huff = Huffman(S)
+    R = huff.returnHuff()
+
+    def printTree(R):
+        if(R == None):
+            return None
+        else:
+            print(R.frequence)
+            printTree(R.left)
+            printTree(R.right)
+
+    printTree(R[0])
 
     #display image
     #cv2.imshow('imaged', resized)

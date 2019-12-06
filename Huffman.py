@@ -3,64 +3,32 @@ from Node import Node
 
 class Huffman:
 
-    def __init__(self):
-        self.huff = []
+    def __init__(self, S):
+        self.huff = S
+        self.node = None
         self.heap = Heap()
-        self.node = Node()
 
-    #heap maximum
-    def heapMax(self, S, i):
-        E = 2 * i
-        D = (2 * i) + 1
-        M = i
+    #build Tree of heap Max
+    def buildTree(self):
+        for i in range(len(self.huff)-1):
+            self.node = Node()
 
-        if (E <= (len(S) - 1) and S[E] > S[M]):
-            M = E
-        if (D <= (len(S) - 1) and S[D] > S[M]):
-            M = D
+            P1 = self.heap.extract(self.huff)
+            P2 = self.heap.extract(self.huff)
 
-        if (M != i):
-            aux = S[M]
-            S[M] = S[i]
-            S[i] = aux
-            self.heapMax(S, M)
-
-    def buildHeapMax(self, S):
-        for i in range(len(S) // 2, 1, -1):
-            self.heapMax(S, i)
-    #.......................................
-
-    # priority queue functions
-    def extract(self, S):
-        if (len(S) > 0):
-            R = S[1]
-            S[1] = S[len(S) - 1]
-            S[len(S) - 1] = R
-            del (S[len(S) - 1])
-            self.heapMax(S, 1)
-            return R
-    #..........................................
-
-    def constructHuffman(self):
-        aux = self.heap.returnHeapMinimum()
-        for i in range(len(aux)):
-            p1 = self.extract(aux)
-            p2 = self.extract(aux)
-            add = p1.frequence + p2.frequence
-
-            self.node.frequence = add
-            self.node.data = -1
-
-            if(p1 > p2):
-                self.node.left = p2
-                self.node.right = p1
+            if(P1.frequence > P2.frequence):
+                self.node.left = P2
+                self.node.right = P1
             else:
-                self.node.left = p1
-                self.node.right = p2
+                self.node.left = P1
+                self.node.right = P2
 
-            self.huff.append(self.node)
-            self.heapMax(self.huff, 1)
-    #.............................................
+            self.node.frequence = P1.frequence + P2.frequence
+            self.node.data = -1
+            self.huff.insert(0, self.node)
+            self.heap.heapUp(self.huff, len(self.huff)-1)
+
 
     def returnHuff(self):
+        self.buildTree()
         return self.huff

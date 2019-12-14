@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 from Heap import Heap
 from Huffman import Huffman
 from Node import Node
@@ -26,26 +27,36 @@ if __name__ == '__main__':
 
     #here we construct txhe heap minimum bottom_up
     heap = Heap(tmp)
-    S = heap.returnHeapUp()
-
-    for i in range(len(S)):
-        print(S[i].frequence, end=" ")
-
-    print("\n")
+    S = heap.returnHeapMinimum()
 
     #build the tree of heap Max
     huff = Huffman(S)
     R = huff.returnHuff()
 
-    def printTree(R):
-        if(R == None):
-            return None
-        else:
-            print(R.frequence)
-            printTree(R.left)
-            printTree(R.right)
+    #build the dictionary
+    D = huff.goThroughTree(R)
+    #print(D)
 
-    printTree(R[0])
+    string = '10010111100011011001000111100110'
+    print(len(string))
+    arr = ['0']*((len(string)//8))
+    print(arr)
+
+    index = 0
+    bitcont = 0
+
+    for i in range(len(string)):
+        op = int(arr[index], 2) << 1 | int(string[i], 2)
+        arr[index] = bin(op)
+        bitcont += 1
+        if (bitcont == 8):
+            bitcont = 0
+            index += 1
+
+    print(arr)
+
+    #T = huff.bitWiseOp(image_copy, w_resized, h_resized, D)
+    #print(T)
 
     #display image
     #cv2.imshow('imaged', resized)

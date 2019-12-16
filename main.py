@@ -1,8 +1,8 @@
 import cv2
-import numpy as np
 from Heap import Heap
 from Huffman import Huffman
 from Node import Node
+import zipfile
 
 if __name__ == '__main__':
     #read the image
@@ -35,28 +35,24 @@ if __name__ == '__main__':
 
     #build the dictionary
     D = huff.goThroughTree(R)
-    #print(D)
 
-    string = '10010111100011011001000111100110'
-    print(len(string))
-    arr = ['0']*((len(string)//8))
-    print(arr)
+    #codification of the picture
+    T, index = huff.compressOp(image_copy, w_resized, h_resized, D)
 
-    index = 0
-    bitcont = 0
+    #writing the codification in a file
+    file = open('test.txt', 'w')
+    for i in range(index):
+        file.write(str(T[i])+' ')
 
-    for i in range(len(string)):
-        op = int(arr[index], 2) << 1 | int(string[i], 2)
-        arr[index] = bin(op)
-        bitcont += 1
-        if (bitcont == 8):
-            bitcont = 0
-            index += 1
+    file1 = open('test.txt', 'r')
 
-    print(arr)
+    #result of the decompress
+    dc = huff.decompressOp(file1, R)
+    print(dc)
 
-    #T = huff.bitWiseOp(image_copy, w_resized, h_resized, D)
-    #print(T)
+    file.close()
+    file1.close()
+
 
     #display image
     #cv2.imshow('imaged', resized)

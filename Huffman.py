@@ -9,6 +9,7 @@ class Huffman:
         self.node = None
         self.heap = Heap()
         self.l = []
+        self.cont = 0
 
     #build Tree of heap Max
     def buildTree(self):
@@ -37,6 +38,7 @@ class Huffman:
         return self.buildTree()
 
     #go through the tree, build the codification and add in a dictionary
+    #this method build the code of each pixel
     def goThroughTree(self, H, cod=''):
         if H.left == None and H.right == None:
             self.l.append((H.data, cod))
@@ -47,22 +49,51 @@ class Huffman:
         return d
     #....................................................
 
-    def bitWiseOp(self, image, weight, height, dic):
+    def compressOp(self, image, weight, height, dic):
         bitstring = ''
         for i in range(height):
             for j in range(weight):
                 bitstring = bitstring + dic[image[i][j]]
 
-        arr = ['0']*(len(bitstring)//8)
+        arr = [0]*((len(bitstring)//8)+1)
         index = 0
         bitcont = 0
 
         for i in range(len(bitstring)):
-            op = int(arr[index], 2) << 1 | int(bitstring[i], 2)
-            arr[index] = bin(op)
+            arr[index] = int(arr[index]) << 1 | int(bitstring[i])
             bitcont += 1
             if (bitcont == 8):
                 bitcont = 0
                 index += 1
 
-        return arr
+        return arr, index
+
+    #............................................
+
+
+    #operations to decompress
+    def returnValue(self, H, value):
+        t = value[self.cont]
+        if(H.left == None and H.right == None):
+            self.cont = 0
+            return H.data
+        else:
+            if(value[self.cont]== '0'):
+                self.cont += 1
+                self.returnValue(H.left, value)
+            else:
+                self.cont += 1
+                self.returnValue(H.right, value)
+
+    def decompressOp(self, file, H):
+        l = []
+        value = ''
+        filedata = file.readline()
+        for i in filedata:
+            if i != ' ':
+                value = value + i
+                continue
+            a = self.returnValue(H, bin(int(value)))
+            l.append(a)
+            value = ''
+        return l
